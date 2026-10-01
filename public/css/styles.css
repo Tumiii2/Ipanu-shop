@@ -165,11 +165,6 @@
 * {
   transition: color 0.3s ease, background-color 0.3s ease;
 }
-svg {
-  width: 2rem !important;
-  height: 2rem !important;
-  flex-shrink: 0;
-}
 .contact-icon {
   width: 2.5rem !important;
   height: 2.5rem !important;
