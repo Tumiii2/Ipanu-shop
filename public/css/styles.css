@@ -1,7 +1,7 @@
 /* The Ìpánu Zone - Custom Styles */
 @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;500;600;700&display=swap');
 
-.font-fredoka { font-family: 'Fredoka One', cursive; }
+.font-fredoka { font-family: 'Fredoka One', cursive; font-weight: 400 !important; }
 .font-poppins { font-family: 'Poppins', sans-serif; }
 
 /* Color palette */

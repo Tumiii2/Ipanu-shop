@@ -6,7 +6,7 @@ const products = [
     description: "Local Nigerian snacks mix",
     price: 2000,
     minOrder: 100,
-    image: "/images/placeholder-ipanu-mix.svg",
+    image: "/images/ipanu-mix.jpeg",
     category: "snacks"
   },
   {
@@ -15,7 +15,7 @@ const products = [
     description: "Tapioca with fruit topping",
     price: 2000,
     minOrder: 100,
-    image: "/images/placeholder-tapioca.svg",
+    image: "/images/tapioca.jpeg",
     category: "dessert"
   },
   {
@@ -24,7 +24,7 @@ const products = [
     description: "Garri, Eja yoyo & Ede",
     price: 2500,
     minOrder: 50,
-    image: "/images/placeholder-garri-platter.svg",
+    image: "/images/garri-platter.jpeg",
     category: "main"
   }
 ];
