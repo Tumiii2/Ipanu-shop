@@ -29,6 +29,7 @@
   </svg>
   <span id="cart-count" class="absolute -top-2 -right-3 bg-[#FDCB07] text-[#0A0A0A] min-w-[1.25rem] h-5 px-1 inline-flex items-center justify-center rounded-full text-xs font-bold">0</span>
 </a>
+<span id="authSlot"></span>
       </nav>
     </div>
   </header>
@@ -108,5 +109,8 @@
     // Initialize cart count on page load
     updateCartCount();
   </script>
+     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+   <script src="js/auth.js"></script>
+   <script src="js/ui.js"></script>
 </body>
 </html>
