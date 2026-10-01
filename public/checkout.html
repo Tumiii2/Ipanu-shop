@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - The Ìpánu Zone</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-[#FFFBEA] text-[#1C1C1C]">
+  <header class="bg-[#0A0A0A] py-4">
+    <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="images/logo.png" alt="Logo" class="h-12">
+        <span class="text-2xl font-bold text-[#FDCB07]">The Ìpánu Zone</span>
+      </a>
+      <nav class="flex gap-5 text-white">
+        <a href="menu.html">Menu</a><a href="cart.html">Cart</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <h1 class="text-4xl font-bold text-center mb-8">Checkout</h1>
+
+    <div id="summary" class="bg-[#2B2118] text-white rounded-2xl p-6 mb-8"></div>
+
+    <div id="loginBox" class="hidden bg-white rounded-2xl p-8 text-center shadow">
+      <p class="mb-4 text-lg">Please sign in to place your order.</p>
+      <button id="googleBtn" class="bg-[#FDCB07] text-black font-bold px-8 py-3 rounded-full">Sign in with Google</button>
+    </div>
+
+    <form id="orderForm" class="hidden bg-white rounded-2xl p-8 shadow space-y-4">
+      <p class="text-sm text-gray-600">Signed in as <span id="userEmail" class="font-semibold"></span>
+        · <button type="button" id="signOutBtn" class="underline">Sign out</button></p>
+      <input id="name" required placeholder="Full name" class="w-full border rounded-lg p-3">
+      <input id="phone" required placeholder="Phone number" class="w-full border rounded-lg p-3">
+      <select id="method" class="w-full border rounded-lg p-3">
+        <option value="delivery">Delivery</option>
+        <option value="pickup">Pickup</option>
+      </select>
+      <textarea id="address" placeholder="Delivery address" class="w-full border rounded-lg p-3"></textarea>
+      <textarea id="notes" placeholder="Notes (optional)" class="w-full border rounded-lg p-3"></textarea>
+      <p id="msg" class="text-red-600 font-semibold"></p>
+      <button id="placeBtn" class="w-full bg-[#FDCB07] text-black font-bold py-3 rounded-full">Place Order</button>
+    </form>
+
+    <div id="success" class="hidden bg-white rounded-2xl p-8 text-center shadow">
+      <h2 class="text-3xl font-bold mb-2">Order placed! 🎉</h2>
+      <p class="mb-2">Order ID: <span id="orderId" class="font-mono"></span></p>
+      <p class="mb-6">A confirmation email is on its way. We'll contact you to confirm.</p>
+      <a href="menu.html" class="bg-[#FDCB07] text-black font-bold px-8 py-3 rounded-full">Back to menu</a>
+    </div>
+  </main>
+
+  <script src="js/products.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    const money = (n) => '₦' + n.toLocaleString();
+    let dbProducts = [];
+
+    // Find the saved cart in localStorage (array of {id, quantity})
+    function readCart() {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        try {
+          const v = JSON.parse(localStorage.getItem(key));
+          if (Array.isArray(v) && v.length && v[0].id !== undefined && v[0].quantity) return { key, items: v };
+        } catch (e) {}
+      }
+      return { key: null, items: [] };
+    }
+
+    // Match each cart item to the database product by name
+    function cartLines() {
+      return readCart().items.map((item) => {
+        const local = products.find((p) => p.id === item.id);
+        const db = local && dbProducts.find((p) => p.name === local.name);
+        return db ? { db, quantity: item.quantity } : null;
+      }).filter(Boolean);
+    }
+
+    function renderSummary() {
+      const lines = cartLines();
+      const box = document.getElementById('summary');
+      if (!lines.length) {
+        box.innerHTML = '<p>Your cart is empty. <a class="underline text-[#FDCB07]" href="menu.html">Go to the menu</a></p>';
+        return false;
+      }
+      const total = lines.reduce((s, l) => s + l.db.price * l.quantity, 0);
+      box.innerHTML = lines.map((l) =>
+        `<div class="flex justify-between py-1"><span>${l.db.name} x ${l.quantity}</span><span>${money(l.db.price * l.quantity)}</span></div>`
+      ).join('') + `<div class="flex justify-between border-t border-white/20 mt-3 pt-3 text-xl font-bold text-[#FDCB07]"><span>Total</span><span>${money(total)}</span></div>`;
+      return true;
+    }
+
+    async function init() {
+      await initAuth();
+      dbProducts = await (await fetch('/api/products')).json();
+      const hasItems = renderSummary();
+      const session = await getSession();
+      if (!hasItems) return;
+      if (session) {
+        document.getElementById('orderForm').classList.remove('hidden');
+        document.getElementById('userEmail').textContent = session.user.email;
+      } else {
+        document.getElementById('loginBox').classList.remove('hidden');
+      }
+    }
+
+    document.getElementById('googleBtn').addEventListener('click', signInWithGoogle);
+    document.getElementById('signOutBtn').addEventListener('click', signOutUser);
+
+    document.getElementById('orderForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('msg');
+      const btn = document.getElementById('placeBtn');
+      msg.textContent = '';
+      const session = await getSession();
+      if (!session) { msg.textContent = 'Please sign in first.'; return; }
+
+      btn.disabled = true; btn.textContent = 'Placing order...';
+      const body = {
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        deliveryMethod: document.getElementById('method').value,
+        address: document.getElementById('address').value,
+        notes: document.getElementById('notes').value,
+        items: cartLines().map((l) => ({ id: l.db.id, quantity: l.quantity })),
+      };
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + session.access_token },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Something went wrong.');
+        const { key } = readCart();
+        if (key) localStorage.removeItem(key);
+        document.getElementById('orderForm').classList.add('hidden');
+        document.getElementById('summary').classList.add('hidden');
+        document.getElementById('orderId').textContent = data.orderId;
+        document.getElementById('success').classList.remove('hidden');
+      } catch (err) {
+        msg.textContent = err.message;
+        btn.disabled = false; btn.textContent = 'Place Order';
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>

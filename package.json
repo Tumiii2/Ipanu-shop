@@ -16,8 +16,10 @@
   "author": "The Ìpánu Zone",
   "license": "MIT",
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
     "dotenv": "^18.0.5",
     "express": "^4.22.3",
-    "ipanu-shop": "file:"
+    "ipanu-shop": "file:",
+    "ws": "^8.22.0"
   }
 }
