@@ -12,40 +12,55 @@
 </head>
 <body class="font-poppins bg-[#FFFBEA] text-[#1C1C1C]">
   <!-- Header -->
-  <header class="bg-[#0A0A0A] text-white py-4">
-    <div class="container mx-auto px-4 flex justify-between items-center">
-      <div class="flex items-center space-x-3">
-        <img src="images/logo.png" alt="The Ìpánu Zone Logo" class="h-12 w-auto">
-        <span class="text-2xl font-fredoka font-bold text-[#FDCB07]">The Ìpánu Zone</span>
-      </div>
-      <nav class="flex space-x-6">
-        <a href="index.html" class="hover:text-[#FDCB07] transition-colors">Home</a>
-        <a href="menu.html" class="hover:text-[#FDCB07] transition-colors">Menu</a>
-        <a href="cart.html" class="hover:text-[#FDCB07] transition-colors">Cart (<span id="cart-count" class="bg-[#FDCB07] text-[#0A0A0A] px-2 py-1 rounded-full text-sm font-bold">0</span>)</a>
-      </nav>
-    </div>
-  </header>
+ <header class="bg-[#0A0A0A] text-white py-3 md:py-4">
+  <div class="container mx-auto px-4 flex justify-between items-center gap-2">
+    <a href="index.html" class="flex items-center space-x-2 md:space-x-3 min-w-0">
+      <img src="images/logo.png" alt="The Ìpánu Zone Logo" class="h-9 md:h-12 w-auto">
+      <span class="text-base md:text-2xl font-fredoka text-[#FDCB07] leading-tight">The Ìpánu Zone</span>
+    </a>
+    <nav class="flex items-center space-x-3 md:space-x-6 text-sm md:text-base whitespace-nowrap">
+      <a href="index.html" class="hover:text-[#FDCB07] transition-colors">Home</a>
+      <a href="menu.html" class="hover:text-[#FDCB07] transition-colors">Menu</a>
+     <a href="cart.html" class="relative inline-flex items-center hover:text-[#FDCB07] transition-colors" aria-label="Cart">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+    <circle cx="9" cy="21" r="1"/>
+    <circle cx="20" cy="21" r="1"/>
+    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+  </svg>
+  <span id="cart-count" class="absolute -top-2 -right-3 bg-[#FDCB07] text-[#0A0A0A] min-w-[1.25rem] h-5 px-1 inline-flex items-center justify-center rounded-full text-xs font-bold">0</span>
+</a>
+    </nav>
+  </div>
+</header>
     <!-- Hero Section -->
-  <section class="bg-[#FFF8E1] text-[#0A0A0A] py-20 text-center">
-    <div class="container mx-auto px-4">
-      <h1 class="text-4xl md:text-6xl font-fredoka font-bold mb-6 text-[#0A0A0A]">
+<section class="bg-[#FFF8E1] text-[#0A0A0A] py-16 md:py-24">
+  <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+    <div class="text-center md:text-left">
+      <span class="inline-block bg-[#FDCB07] text-[#0A0A0A] text-sm font-bold px-4 py-1 rounded-full mb-4">
+        Authentic Nigerian Snacks
+      </span>
+      <h1 class="text-4xl md:text-6xl font-fredoka mb-6 text-[#0A0A0A]">
         Welcome to The Ìpánu Zone
       </h1>
-      <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-[#1C1C1C]">
+      <p class="text-lg md:text-xl mb-8 max-w-xl mx-auto md:mx-0 text-[#1C1C1C]">
         Discover authentic Nigerian local snacks and delicacies, carefully prepared with love
       </p>
-      <a href="menu.html" class="inline-block bg-[#FDCB07] text-[#0A0A0A] px-8 py-4 rounded-full font-bold text-lg hover:bg-[#e6b605] transition-colors">
+      <a href="menu.html" class="inline-block bg-[#FDCB07] text-[#0A0A0A] px-8 py-4 rounded-full font-bold text-lg hover:bg-[#e6b605] transition-colors shadow-lg">
         Order Now
       </a>
     </div>
-  </section>
+    <div>
+      <img src="images/tapioca.jpeg" alt="Ìpánu Zone Tapioca" class="w-full h-80 md:h-[420px] object-cover rounded-3xl shadow-2xl">
+    </div>
+  </div>
+</section>
   <!-- Featured Products -->
   <section class="py-16">
     <div class="container mx-auto px-4">
       <h2 class="text-3xl font-fredoka font-bold text-center mb-12">Our Specialties</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="bg-[#2B2118] rounded-xl shadow-lg overflow-hidden">
-          <img src="images/ipanu-mix.jpeg" alt="Ipanu Mix" class="w-full h-48 object-cover">
+          <img src="images/ipanu-mix.jpeg" alt="Ipanu Mix" class="w-full aspect-[4/3] object-cover">
           <div class="p-6">
             <h3 class="text-xl font-bold mb-2 text-[#FFFBEA]">Ipanu Mix</h3>
             <p class="text-gray-300 text-sm mb-4">Local Nigerian snacks mix</p>
@@ -59,7 +74,7 @@
           </div>
         </div>
                 <div class="bg-[#2B2118] rounded-xl shadow-lg overflow-hidden">
-          <img src="images/tapioca.jpeg" alt="Tapioca" class="w-full h-48 object-cover">
+          <img src="images/tapioca.jpeg" alt="Tapioca" class="w-full aspect-[4/3] object-cover">
           <div class="p-6">
             <h3 class="text-xl font-bold mb-2 text-[#FFFBEA]">Tapioca</h3>
             <p class="text-gray-300 text-sm mb-4">Tapioca with fruit topping</p>
@@ -73,7 +88,7 @@
           </div>
         </div>
                 <div class="bg-[#2B2118] rounded-xl shadow-lg overflow-hidden">
-          <img src="images/garri-platter.jpeg" alt="Garri Platter" class="w-full h-48 object-cover">
+          <img src="images/garri-platter.jpeg" alt="Garri Platter" class="w-full aspect-[4/3] object-cover">
           <div class="p-6">
             <h3 class="text-xl font-bold mb-2 text-[#FFFBEA]">Garri Platter</h3>
             <p class="text-gray-300 text-sm mb-4">Garri, Eja yoyo &amp; Ede</p>
