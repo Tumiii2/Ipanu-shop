@@ -1,0 +1,16 @@
+/* The Ìpánu Zone - Custom Styles */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;500;600;700&display=swap');
+
+.font-fredoka { font-family: 'Fredoka One', cursive; }
+.font-poppins { font-family: 'Poppins', sans-serif; }
+.bg-primary { background-color: #0A0A0A; }
+.bg-secondary { background-color: #1C1C1C; }
+.bg-accent { background-color: #FDCB07; }
+.bg-page { background-color: #FFFBEA; }
+.text-primary { color: #0A0A0A; }
+.text-secondary { color: #1C1C1C; }
+.text-accent { color: #FDCB07; }
+.text-light { color: #FFFFFF; }
+
+/* Smooth transitions */
+* { transition: color 0.3s ease, background-color 0.3s ease; }

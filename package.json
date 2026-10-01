@@ -1,0 +1,23 @@
+{
+  "name": "ipanu-shop",
+  "version": "1.0.0",
+  "description": "The Ìpánu Zone - Online shop for Nigerian local food",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
+  },
+  "keywords": [
+    "nigerian",
+    "food",
+    "shop",
+    "express"
+  ],
+  "author": "The Ìpánu Zone",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^18.0.5",
+    "express": "^4.22.3",
+    "ipanu-shop": "file:"
+  }
+}

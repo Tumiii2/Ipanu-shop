@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Ìpánu Zone - Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+</head>
+<body class="font-poppins bg-[#FFFBEA] text-[#1C1C1C]">
+  <!-- Header -->
+  <header class="bg-[#0A0A0A] text-white py-4">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <img src="images/logo.png" alt="The Ìpánu Zone Logo" class="h-12 w-auto">
+        <span class="text-2xl font-fredoka font-bold text-[#FDCB07]">The Ìpánu Zone</span>
+      </div>
+      <nav class="flex space-x-6">
+        <a href="index.html" class="hover:text-[#FDCB07] transition-colors">Home</a>
+        <a href="menu.html" class="hover:text-[#FDCB07] transition-colors">Menu</a>
+        <a href="cart.html" class="hover:text-[#FDCB07] transition-colors">Cart (<span id="cart-count" class="bg-[#FDCB07] text-[#0A0A0A] px-2 py-1 rounded-full text-sm font-bold">0</span>)</a>
+      </nav>
+    </div>
+  </header>
+    <!-- Hero Section -->
+  <section class="bg-[#FFF8E1] text-[#0A0A0A] py-20 text-center">
+    <div class="container mx-auto px-4">
+      <h1 class="text-4xl md:text-6xl font-fredoka font-bold mb-6 text-[#0A0A0A]">
+        Welcome to The Ìpánu Zone
+      </h1>
+      <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-[#1C1C1C]">
+        Discover authentic Nigerian local snacks and delicacies, carefully prepared with love
+      </p>
+      <a href="menu.html" class="inline-block bg-[#FDCB07] text-[#0A0A0A] px-8 py-4 rounded-full font-bold text-lg hover:bg-[#e6b605] transition-colors">
+        Order Now
+      </a>
+    </div>
+  </section>
+  <!-- Featured Products -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-fredoka font-bold text-center mb-12">Our Specialties</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-[#1C1C1C] rounded-xl shadow-lg overflow-hidden">
+          <img src="images/placeholder-ipanu-mix.svg" alt="Ipanu Mix" class="w-full h-48 object-cover">
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2 text-[#FFFBEA]">Ipanu Mix</h3>
+            <p class="text-gray-300 text-sm mb-4">Local Nigerian snacks mix</p>
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-bold text-[#FDCB07]">₦2,000</span>
+              <span class="text-sm text-gray-400">Min: 100</span>
+            </div>
+            <a href="menu.html" class="block w-full bg-[#FDCB07] text-[#0A0A0A] py-3 rounded-full font-bold text-center hover:bg-[#e6b605] transition-colors">
+              Order Now
+            </a>
+          </div>
+        </div>
+        <div class="bg-[#1C1C1C] rounded-xl shadow-lg overflow-hidden">
+          <img src="images/placeholder-tapioca.svg" alt="Tapioca" class="w-full h-48 object-cover">
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2 text-[#FFFBEA]">Tapioca</h3>
+            <p class="text-gray-300 text-sm mb-4">Tapioca with fruit topping</p>
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-bold text-[#FDCB07]">₦2,000</span>
+              <span class="text-sm text-gray-400">Min: 100</span>
+            </div>
+            <a href="menu.html" class="block w-full bg-[#FDCB07] text-[#0A0A0A] py-3 rounded-full font-bold text-center hover:bg-[#e6b605] transition-colors">
+              Order Now
+            </a>
+          </div>
+        </div>
+        <div class="bg-[#1C1C1C] rounded-xl shadow-lg overflow-hidden">
+          <img src="images/placeholder-garri-platter.svg" alt="Garri Platter" class="w-full h-48 object-cover">
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2 text-[#FFFBEA]">Garri Platter</h3>
+            <p class="text-gray-300 text-sm mb-4">Garri, Eja yoyo &amp; Ede</p>
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-bold text-[#FDCB07]">₦2,500</span>
+              <span class="text-sm text-gray-400">Min: 50</span>
+            </div>
+            <a href="menu.html" class="block w-full bg-[#FDCB07] text-[#0A0A0A] py-3 rounded-full font-bold text-center hover:bg-[#e6b605] transition-colors">
+              Order Now
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Contact Section -->
+  <section class="py-16 bg-[#1C1C1C] text-white">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-fredoka font-bold mb-8">Contact Us</h2>
+      <div class="flex flex-col md:flex-row justify-center items-center md:space-x-8">
+        <p class="mb-4 md:mb-0">📞 <strong>08034314148</strong></p>
+        <p class="mb-4 md:mb-0">📸 <strong>@theipanuzone</strong></p>
+        <p>📧 <strong>ipanuzone@gmail.com</strong></p>
+      </div>
+    </div>
+  </section>
+  <!-- Footer -->
+  <footer class="bg-[#0A0A0A] text-white py-8">
+    <div class="container mx-auto px-4 text-center">
+      <div class="flex items-center justify-center space-x-3 mb-4">
+        <img src="images/logo.png" alt="The Ìpánu Zone Logo" class="h-10 w-auto">
+        <span class="font-fredoka text-xl font-bold text-[#FDCB07]">The Ìpánu Zone</span>
+      </div>
+      <div class="text-gray-400 text-sm">
+        <p>📞 08034314148 | 📸 @theipanuzone | 📧 ipanuzone@gmail.com</p>
+        <p class="mt-2">© 2024 The Ìpánu Zone. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Ìpánu Zone - Cart</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+</head>
+<body class="font-poppins bg-[#FFFBEA] text-[#1C1C1C]">
+  <!-- Header -->
+  <header class="bg-[#0A0A0A] text-white py-4">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <img src="images/logo.png" alt="The Ìpánu Zone Logo" class="h-12 w-auto">
+        <span class="text-2xl font-fredoka font-bold text-[#FDCB07]">The Ìpánu Zone</span>
+      </div>
+      <nav class="flex space-x-6">
+        <a href="index.html" class="hover:text-[#FDCB07] transition-colors">Home</a>
+        <a href="menu.html" class="hover:text-[#FDCB07] transition-colors">Menu</a>
+        <a href="cart.html" class="hover:text-[#FDCB07] transition-colors">Cart (<span id="cart-count" class="bg-[#FDCB07] text-[#0A0A0A] px-2 py-1 rounded-full text-sm font-bold">0</span>)</a>
+      </nav>
+    </div>
+  </header>
+  <!-- Cart Section -->
+  <section class="py-20">
+    <div class="container mx-auto px-4">
+      <h1 class="text-4xl font-fredoka font-bold text-center mb-12">Your Cart</h1>
+      <div id="cart-items" class="space-y-4 mb-8"></div>
+      <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-lg">Total:</span>
+          <span id="cart-total" class="text-2xl font-bold text-[#FDCB07]">₦0</span>
+        </div>
+      </div>
+      <div class="text-center">
+        <a href="menu.html" class="inline-block bg-[#FDCB07] text-[#0A0A0A] px-8 py-3 rounded-full font-bold hover:bg-[#e6b605] transition-colors">
+          Continue Shopping
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- Contact Section -->
+  <section class="py-16 bg-[#1C1C1C] text-white">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-fredoka font-bold mb-8">Contact Us</h2>
+      <div class="flex flex-col md:flex-row justify-center items-center md:space-x-8">
+        <p class="mb-4 md:mb-0">📞 <strong>08034314148</strong></p>
+        <p class="mb-4 md:mb-0">📸 <strong>@theipanuzone</strong></p>
+        <p>📧 <strong>ipanuzone@gmail.com</strong></p>
+      </div>
+    </div>
+  </section>
+    <!-- Footer -->
+  <footer class="bg-[#0A0A0A] text-white py-8">
+    <div class="container mx-auto px-4 text-center">
+      <div class="flex items-center justify-center space-x-3 mb-4">
+        <img src="images/logo.png" alt="The Ìpánu Zone Logo" class="h-10 w-auto">
+        <span class="font-fredoka text-xl font-bold text-[#FDCB07]">The Ìpánu Zone</span>
+      </div>
+      <div class="text-gray-400 text-sm">
+        <p>📞 08034314148 | 📸 @theipanuzone | 📧 ipanuzone@gmail.com</p>
+        <p class="mt-2">© 2024 The Ìpánu Zone. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <script>
+    // Render cart items
+    function renderCart() {
+      var cartItemsEl = document.getElementById('cart-items');
+      var cartItemsList = cart.getAll();
+      cartItemsEl.innerHTML = '';
+      if (cartItemsList.length === 0) {
+        cartItemsEl.innerHTML = '<p class="text-center text-gray-500">Your cart is empty. <a href="menu.html" class="text-[#FDCB07] hover:underline">Browse our menu</a>.</p>';
+      } else {
+        cartItemsList.forEach(function(item) {
+          var product = cart.getProductById(item.id);
+          if (!product) return;
+          var itemDiv = document.createElement('div');
+          itemDiv.className = 'bg-[#1C1C1C] text-white rounded-xl p-4';
+          itemDiv.innerHTML = 
+            '<div class="flex items-center justify-between">' +
+            '<div class="flex items-center space-x-4">' +
+            '<img src="' + product.image + '" alt="' + product.name + '" class="w-16 h-16 object-cover rounded">' +
+            '<div>' +
+            '<h3 class="font-bold text-[#FFFBEA]">' + product.name + '</h3>' +
+            '<p class="text-sm text-gray-300">₦' + product.price.toLocaleString() + ' x ' + item.quantity + '</p>' +
+            '<p class="text-xs text-gray-400">Min: ' + item.minOrder + '</p>' +
+            '</div>' +
+            '</div>' +
+            '<div class="flex items-center space-x-2">' +
+            '<button onclick="updateQuantity(' + item.id + ', ' + (item.quantity - 1) + ')" class="bg-[#0A0A0A] text-white px-3 py-1 rounded hover:bg-[#333]">-</button>' +
+            '<span class="px-3">' + item.quantity + '</span>' +
+            '<button onclick="updateQuantity(' + item.id + ', ' + (item.quantity + 1) + ')" class="bg-[#0A0A0A] text-white px-3 py-1 rounded hover:bg-[#333]">+</button>' +
+            '<button onclick="removeFromCart(' + item.id + ')" class="bg-[#FDCB07] text-[#0A0A0A] px-3 py-1 rounded font-bold hover:bg-[#e6b605]">Remove</button>' +
+            '</div>' +
+            '</div>';
+          cartItemsEl.appendChild(itemDiv);
+        });
+      }
+      document.getElementById('cart-total').textContent = '₦' + cart.getTotal().toLocaleString();
+      var count = cartItemsList.reduce(function(total, item) { return total + item.quantity; }, 0);
+      document.getElementById('cart-count').textContent = count;
+    }
+    function updateQuantity(productId, quantity) {
+      var product = cart.getProductById(productId);
+      if (product && quantity >= product.minOrder) {
+        cart.updateQuantity(productId, quantity);
+        renderCart();
+      } else {
+        alert('Minimum order is ' + product.minOrder);
+      }
+    }
+    function removeFromCart(productId) {
+      cart.remove(productId);
+      renderCart();
+    }
+    renderCart();
+  </script>
+</body>
+</html>
