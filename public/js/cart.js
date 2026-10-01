@@ -98,14 +98,14 @@ try {
 
 // Toast notification function
 function showToast(message) {
-  var toast = document.getElementById('toast');
-  if (toast) {
-    toast.textContent = message;
-    toast.classList.add('show');
-    setTimeout(function() {
-      toast.classList.remove('show');
-    }, 2500);
-  }
+  var old = document.getElementById('toast-live');
+  if (old) old.remove();
+  var t = document.createElement('div');
+  t.id = 'toast-live';
+  t.textContent = message;
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;max-width:320px;background:#2B2118;color:#FDCB07;padding:12px 20px;border-radius:12px;font-weight:600;font-family:Poppins,sans-serif;z-index:99999;box-shadow:0 4px 12px rgba(0,0,0,.3)';
+  document.body.appendChild(t);
+  setTimeout(function () { t.remove(); }, 2500);
 }
 
 // Confirm modal function

@@ -169,3 +169,15 @@
   width: 2.5rem !important;
   height: 2.5rem !important;
 }
+#authSlot { display: inline-flex; align-items: center; gap: 12px; margin-left: 16px; }
+.auth-hi { color: #FDCB07; font-weight: 600; font-size: 0.95rem; white-space: nowrap; }
+.auth-btn { border: 2px solid #FDCB07; color: #FDCB07; background: transparent; font-weight: 700; font-size: 0.85rem; padding: 6px 14px; border-radius: 999px; cursor: pointer; transition: all 0.2s; }
+.auth-btn:hover { background: #FDCB07; color: #0A0A0A; }
+.auth-btn-solid { background: #FDCB07; color: #0A0A0A; }
+.auth-btn-solid:hover { background: #e6b800; }
+@media (max-width: 640px) { .auth-hi { display: none; } }
+
+header nav { display: flex !important; align-items: center !important; gap: 28px; }
+header nav > * { margin: 0 !important; }
+header nav a { display: inline-flex; align-items: center; line-height: 1; }
+#authSlot { margin-left: 8px; }

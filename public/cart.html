@@ -51,6 +51,16 @@
       </div>
     </div>
   </section>
+  <div id="confirm-modal">
+    <div class="modal-content">
+      <h3>Remove item?</h3>
+      <p>Are you sure you want to remove this item from your cart?</p>
+      <div class="modal-buttons">
+        <button onclick="hideConfirmModal()" class="btn-cancel">Cancel</button>
+        <button onclick="cart.remove(pendingRemoveProductId); hideConfirmModal(); showToast('Removed from cart'); renderCart()" class="btn-confirm">Remove</button>
+      </div>
+    </div>
+  </div>
   <!-- Contact Section -->
   <section class="py-16 bg-[#1C1C1C] text-white">
     <div class="container mx-auto px-4 text-center">
@@ -70,7 +80,7 @@
         <span class="font-fredoka text-xl font-bold text-[#FDCB07]">The Ìpánu Zone</span>
       </div>
       <div class="text-gray-400 text-sm">
-        <p>📞 08034314148 | 📸 @theipanuzone | 📧 ipanuzone@gmail.com</p>
+        <p>📸 @theipanuzone | 📧 ipanuzone@gmail.com</p>
         <p class="mt-2">© 2024 The Ìpánu Zone. All rights reserved.</p>
       </div>
     </div>
@@ -119,12 +129,12 @@
         cart.updateQuantity(productId, quantity);
         renderCart();
       } else {
-        alert('Minimum order is ' + product.minOrder);
+        showToast('Minimum order is ' + product.minOrder);
       }
     }
     function removeFromCart(productId) {
-      cart.remove(productId);
-      renderCart();
+      var product = cart.getProductById(productId);
+      if (product) showConfirmModal(product.name, productId);
     }
     renderCart();
   </script>
