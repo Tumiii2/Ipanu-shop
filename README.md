@@ -100,7 +100,6 @@ ipanu-shop/
 
 ## Contact
 
-- Phone: 08034314148
 - Instagram: [@theipanuzone](https://instagram.com/theipanuzone)
 - Email: [ipanuzone@gmail.com](mailto:ipanuzone@gmail.com)
 
