@@ -134,8 +134,76 @@ function hideConfirmModal() {
 function updateCartCount() {
   var cartItems = cart.getAll();
   var count = cartItems.length; // Number of different items, not total quantity
+  updateCartBadge(count);
+}
+
+function updateCartBadge(count) {
   var countElements = document.querySelectorAll('#cart-count');
   countElements.forEach(function(el) {
-    el.textContent = count;
+    var nextCount = String(count);
+    if (el.textContent !== nextCount) {
+      el.textContent = nextCount;
+      el.classList.remove('cart-count-pop');
+      void el.offsetWidth;
+      el.classList.add('cart-count-pop');
+      setTimeout(function() { el.classList.remove('cart-count-pop'); }, 350);
+    }
   });
 }
+
+(function() {
+  var revealSelector = 'section, .product-card, .contact-card, #product-grid > div, #cart-items > div';
+
+  function initializePageEffects() {
+    updateCartCount();
+
+    document.querySelectorAll('#copyright-year').forEach(function(year) {
+      year.textContent = new Date().getFullYear();
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+      return;
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    function observeElement(element) {
+      if (element.matches(revealSelector) && !element.classList.contains('fade-up')) {
+        element.classList.add('fade-up');
+        observer.observe(element);
+      }
+      element.querySelectorAll(revealSelector).forEach(function(child) {
+        if (!child.classList.contains('fade-up')) {
+          child.classList.add('fade-up');
+          observer.observe(child);
+        }
+      });
+    }
+
+    document.querySelectorAll(revealSelector).forEach(function(element) {
+      element.classList.add('fade-up');
+      observer.observe(element);
+    });
+
+    new MutationObserver(function(records) {
+      records.forEach(function(record) {
+        record.addedNodes.forEach(function(node) {
+          if (node.nodeType === 1) observeElement(node);
+        });
+      });
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializePageEffects);
+  } else {
+    initializePageEffects();
+  }
+})();

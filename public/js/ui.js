@@ -1,3 +1,14 @@
+(function () {
+  var btn = document.getElementById('menu-toggle');
+  var nav = document.querySelector('header nav');
+  if (!btn || !nav) return;
+  btn.addEventListener('click', function () {
+    var open = nav.classList.toggle('nav-open');
+    btn.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', open);
+  });
+})();
+
 (async function () {
   const slot = document.getElementById('authSlot');
   if (!slot || typeof initAuth !== 'function') return;
