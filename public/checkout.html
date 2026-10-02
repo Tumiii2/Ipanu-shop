@@ -5,20 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout - The Ìpánu Zone</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-[#FFFBEA] text-[#1C1C1C]">
-  <header class="bg-[#0A0A0A] py-4">
-    <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
-      <a href="index.html" class="flex items-center gap-3">
-        <img src="images/logo.png" alt="Logo" class="h-12">
-        <span class="text-2xl font-bold text-[#FDCB07]">The Ìpánu Zone</span>
+  <header class="site-header bg-[#0A0A0A] text-white">
+    <div class="site-header__inner container mx-auto px-4">
+      <a href="index.html" class="site-brand">
+        <img src="images/logo.png" alt="The Ìpánu Zone Logo" class="site-brand__logo">
+        <span class="site-brand__name font-fredoka">The Ìpánu Zone</span>
       </a>
-      <nav class="flex gap-5 text-white">
-        <a href="menu.html">Menu</a><a href="cart.html">Cart</a>
+      <div class="mobile-actions">
+        <a href="cart.html" class="mobile-cart" aria-label="Cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span id="cart-count" class="mobile-cart-count">0</span>
+        </a>
+        <button id="menu-toggle" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-navigation"><span></span><span></span><span></span></button>
+      </div>
+      <nav id="primary-navigation" class="site-nav" aria-label="Primary navigation">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="menu.html" class="nav-link">Menu</a>
+        <a href="cart.html" class="nav-cart" aria-label="Cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span id="cart-count" class="desktop-cart-count">0</span>
+        </a>
+        <span id="authSlot"></span>
       </nav>
     </div>
   </header>
+  <div id="navigation-overlay" aria-hidden="true"></div>
 
   <main class="max-w-4xl mx-auto px-4 py-10">
     <h1 class="text-4xl font-bold text-center mb-8">Checkout</h1>
@@ -54,7 +69,9 @@
   </main>
 
   <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
   <script>
     const money = (n) => '₦' + n.toLocaleString();
     let dbProducts = [];

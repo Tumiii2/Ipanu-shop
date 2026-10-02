@@ -33,9 +33,53 @@ app.get('/api/products', async (req, res) => {
 
 async function sendConfirmationEmail(to, order, items) {
   if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN || !to) return;
+  const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  })[character]);
   const lines = items
     .map((i) => `${i.name} x ${i.quantity} = ₦${(i.unit_price * i.quantity).toLocaleString()}`)
     .join('\n');
+  const htmlRows = items.map((item) =>
+    `<tr>` +
+      `<td style="padding:10px 8px;border-bottom:1px solid #e7dfd4;">${escapeHtml(item.name)}</td>` +
+      `<td style="padding:10px 8px;border-bottom:1px solid #e7dfd4;text-align:center;">${escapeHtml(item.quantity)}</td>` +
+      `<td style="padding:10px 8px;border-bottom:1px solid #e7dfd4;text-align:right;white-space:nowrap;">₦${(item.unit_price * item.quantity).toLocaleString()}</td>` +
+    `</tr>`
+  ).join('');
+  const fulfilment = order.delivery_method === 'delivery'
+    ? `Delivery to: ${escapeHtml(order.address || '')}`
+    : 'Pickup';
+  const html =
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0;padding:24px 12px;background-color:#FFFBEA;font-family:Arial,sans-serif;color:#2B2118;">` +
+      `<tr><td align="center">` +
+        `<table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:560px;margin:0 auto;background-color:#FFFBEA;">` +
+          `<tr><td style="padding:20px 24px;background-color:#2B2118;color:#FDCB07;font-size:22px;font-weight:bold;">The Ìpánu Zone</td></tr>` +
+          `<tr><td style="padding:24px;">` +
+            `<p style="margin:0 0 8px;font-size:16px;">Hi ${escapeHtml(order.customer_name)}, thank you for your order!</p>` +
+            `<p style="margin:0 0 20px;color:#81796f;font-size:12px;">Order ID: ${escapeHtml(order.id)}</p>` +
+            `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;font-size:14px;">` +
+              `<tr>` +
+                `<th align="left" style="padding:10px 8px;background-color:#eee7dc;font-size:13px;">Item</th>` +
+                `<th align="center" style="padding:10px 8px;background-color:#eee7dc;font-size:13px;">Qty</th>` +
+                `<th align="right" style="padding:10px 8px;background-color:#eee7dc;font-size:13px;">Price</th>` +
+              `</tr>` +
+              htmlRows +
+              `<tr>` +
+                `<td colspan="2" style="padding:12px 8px;font-weight:bold;border-top:2px solid #2B2118;">Total</td>` +
+                `<td align="right" style="padding:12px 8px;font-weight:bold;white-space:nowrap;border-top:2px solid #2B2118;">₦${order.total.toLocaleString()}</td>` +
+              `</tr>` +
+            `</table>` +
+            `<p style="margin:20px 0 8px;font-size:14px;">${fulfilment}</p>` +
+            `<p style="margin:0;font-size:14px;">We will contact you on ${escapeHtml(order.phone)} to confirm.</p>` +
+          `</td></tr>` +
+          `<tr><td style="padding:16px 24px;background-color:#f3eee5;color:#62594f;font-size:12px;text-align:center;">ipanuzone@gmail.com &nbsp;|&nbsp; 08034314148 &nbsp;|&nbsp; @theipanuzone</td></tr>` +
+        `</table>` +
+      `</td></tr>` +
+    `</table>`;
   const body = new URLSearchParams({
     from: `The Ìpánu Zone <postmaster@${process.env.MAILGUN_DOMAIN}>`,
     to,
@@ -47,6 +91,7 @@ async function sendConfirmationEmail(to, order, items) {
       `${order.delivery_method === 'delivery' ? 'Delivery to: ' + order.address : 'Pickup'}\n\n` +
       `We will contact you on ${order.phone} to confirm.\n\n` +
       `The Ìpánu Zone | 08034314148 | @theipanuzone`,
+    html,
   });
   const auth = Buffer.from(`api:${process.env.MAILGUN_API_KEY}`).toString('base64');
   try {
