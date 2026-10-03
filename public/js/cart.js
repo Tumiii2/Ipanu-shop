@@ -1,22 +1,21 @@
-// Cart functionality for The Ìpánu Zone
+// Cart functionality for Paws & Co
 class Cart {
   constructor() {
     this.items = JSON.parse(localStorage.getItem('cart')) || [];
   }
 
   // Add item to cart or update quantity if already exists
-  add(productId, quantity, minOrder) {
+  add(productId, quantity) {
     var existingItem = this.items.find(function(item) {
-      return item.id === productId;
+      return String(item.id) === String(productId);
     });
     
-    // Ensure quantity is at least the minimum order
-    var validQuantity = Math.max(quantity, minOrder);
+    var validQuantity = Math.max(quantity || 1, 1);
     
     if (existingItem) {
       existingItem.quantity = validQuantity;
     } else {
-      this.items.push({ id: productId, quantity: validQuantity, minOrder: minOrder });
+      this.items.push({ id: productId, quantity: validQuantity });
     }
     
     this.save();
@@ -25,7 +24,7 @@ class Cart {
   // Remove item from cart
   remove(productId) {
     this.items = this.items.filter(function(item) {
-      return item.id !== productId;
+      return String(item.id) !== String(productId);
     });
     this.save();
   }
@@ -33,15 +32,18 @@ class Cart {
   // Update quantity for an item
   updateQuantity(productId, quantity) {
     var item = this.items.find(function(i) {
-      return i.id === productId;
+      return String(i.id) === String(productId);
     });
     if (item) {
-      // Quantity can't go below minimum order
-      item.quantity = Math.max(quantity, item.minOrder);
+      if (quantity < 1) {
+        this.remove(productId);
+        return { updated: true, removed: true };
+      }
+      item.quantity = quantity;
       this.save();
-      return { updated: true, clamped: quantity < item.minOrder };
+      return { updated: true };
     }
-    return { updated: false, clamped: false };
+    return { updated: false };
   }
 
   // Get all cart items
@@ -62,7 +64,7 @@ class Cart {
   getProductById(productId) {
     if (typeof products !== 'undefined') {
       return products.find(function(product) {
-        return product.id === productId;
+        return String(product.id) === String(productId);
       });
     }
     return null;
@@ -103,7 +105,7 @@ function showToast(message) {
   var t = document.createElement('div');
   t.id = 'toast-live';
   t.textContent = message;
-  t.style.cssText = 'position:fixed;bottom:24px;right:24px;max-width:320px;background:#2B2118;color:#FDCB07;padding:12px 20px;border-radius:12px;font-weight:600;font-family:Poppins,sans-serif;z-index:99999;box-shadow:0 4px 12px rgba(0,0,0,.3)';
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;max-width:320px;background:#2B2118;color:#F97316;padding:12px 20px;border-radius:12px;font-weight:600;font-family:Poppins,sans-serif;z-index:99999;box-shadow:0 4px 12px rgba(0,0,0,.3)';
   document.body.appendChild(t);
   setTimeout(function () { t.remove(); }, 2500);
 }

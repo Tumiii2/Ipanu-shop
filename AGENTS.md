@@ -1,11 +1,11 @@
 # AGENTS.md
 
 ## Project
-The Ìpánu Zone: an online shop for a small Nigerian food business.
-Products: Ipanu Mix (local snacks) ₦2,000, Tapioca (with fruit topping)
-₦2,000, Garri Platter (Garri, Eja yoyo & Ede) ₦2,500.
-Minimum order quantities: Ipanu Mix 100, Tapioca 100, Garri Platter 50.
-Contact: 08034314148, Instagram @theipanuzone, ipanuzone@gmail.com.
+Paws & Co: an online shop for pet supplies.
+Products: Chicken Dog Treats ₦3,500, Squeaky Rope Toy ₦2,500,
+Cozy Pet Bed ₦18,000, Cat Feather Wand ₦2,000, Adjustable Pet Collar ₦4,000,
+Stainless Steel Pet Bowl ₦3,000.
+Contact: 08000000000, Instagram @pawsandco, hello@pawsandco.test.
 Customers browse products, add to cart, sign in with Google, check out,
 and get a confirmation email. Prices are in Naira (₦).
 
@@ -14,7 +14,7 @@ and get a confirmation email. Prices are in Naira (₦).
 - Backend: Node.js + Express
 - Database and auth: Supabase (Postgres + Google sign-in)
 - Email: Mailgun (sandbox domain)
-- Deploy: Render
+- Deploy: Vercel
 
 ## Structure
 - /public: frontend pages, css, js, images

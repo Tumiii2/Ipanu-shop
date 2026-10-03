@@ -54,10 +54,10 @@ async function sendConfirmationEmail(to, order, items) {
     ? `Delivery to: ${escapeHtml(order.address || '')}`
     : 'Pickup';
   const html =
-    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0;padding:24px 12px;background-color:#FFFBEA;font-family:Arial,sans-serif;color:#2B2118;">` +
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0;padding:24px 12px;background-color:#ffffff;font-family:Arial,sans-serif;color:#0f766e;">` +
       `<tr><td align="center">` +
-        `<table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:560px;margin:0 auto;background-color:#FFFBEA;">` +
-          `<tr><td style="padding:20px 24px;background-color:#2B2118;color:#FDCB07;font-size:22px;font-weight:bold;">The Ìpánu Zone</td></tr>` +
+        `<table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:560px;margin:0 auto;background-color:#ffffff;">` +
+          `<tr><td style="padding:20px 24px;background-color:#0f766e;color:#f97316;font-size:22px;font-weight:bold;">Paws & Co</td></tr>` +
           `<tr><td style="padding:24px;">` +
             `<p style="margin:0 0 8px;font-size:16px;">Hi ${escapeHtml(order.customer_name)}, thank you for your order!</p>` +
             `<p style="margin:0 0 20px;color:#81796f;font-size:12px;">Order ID: ${escapeHtml(order.id)}</p>` +
@@ -69,28 +69,28 @@ async function sendConfirmationEmail(to, order, items) {
               `</tr>` +
               htmlRows +
               `<tr>` +
-                `<td colspan="2" style="padding:12px 8px;font-weight:bold;border-top:2px solid #2B2118;">Total</td>` +
-                `<td align="right" style="padding:12px 8px;font-weight:bold;white-space:nowrap;border-top:2px solid #2B2118;">₦${order.total.toLocaleString()}</td>` +
+                `<td colspan="2" style="padding:12px 8px;font-weight:bold;border-top:2px solid #0f766e;">Total</td>` +
+                `<td align="right" style="padding:12px 8px;font-weight:bold;white-space:nowrap;border-top:2px solid #0f766e;">₦${order.total.toLocaleString()}</td>` +
               `</tr>` +
             `</table>` +
             `<p style="margin:20px 0 8px;font-size:14px;">${fulfilment}</p>` +
             `<p style="margin:0;font-size:14px;">We will contact you on ${escapeHtml(order.phone)} to confirm.</p>` +
           `</td></tr>` +
-          `<tr><td style="padding:16px 24px;background-color:#f3eee5;color:#62594f;font-size:12px;text-align:center;">ipanuzone@gmail.com &nbsp;|&nbsp; 08034314148 &nbsp;|&nbsp; @theipanuzone</td></tr>` +
+          `<tr><td style="padding:16px 24px;background-color:#f3eee5;color:#62594f;font-size:12px;text-align:center;">pawsandco@gmail.com &nbsp;|&nbsp; 08034314148 &nbsp;|&nbsp; @pawsandco</td></tr>` +
         `</table>` +
       `</td></tr>` +
     `</table>`;
   const body = new URLSearchParams({
-    from: `The Ìpánu Zone <postmaster@${process.env.MAILGUN_DOMAIN}>`,
+    from: `Paws & Co <postmaster@${process.env.MAILGUN_DOMAIN}>`,
     to,
-    subject: 'Your order is confirmed - The Ìpánu Zone',
+    subject: 'Your order is confirmed - Paws & Co',
     text:
       `Hi ${order.customer_name},\n\nThank you for your order!\n\n` +
       `Order ID: ${order.id}\n\n${lines}\n\n` +
       `Total: ₦${order.total.toLocaleString()}\n` +
       `${order.delivery_method === 'delivery' ? 'Delivery to: ' + order.address : 'Pickup'}\n\n` +
       `We will contact you on ${order.phone} to confirm.\n\n` +
-      `The Ìpánu Zone | 08034314148 | @theipanuzone`,
+      `Paws & Co | 08000000000 | @pawsandco`,
     html,
   });
   const auth = Buffer.from(`api:${process.env.MAILGUN_API_KEY}`).toString('base64');
@@ -131,8 +131,8 @@ app.post('/api/orders', async (req, res) => {
     for (const item of items) {
       const p = products.find((x) => x.id === item.id);
       const qty = parseInt(item.quantity, 10);
-      if (!p || !Number.isInteger(qty) || qty < p.min_order) {
-        return res.status(400).json({ error: `Minimum order for ${p ? p.name : 'an item'} is ${p ? p.min_order : '?'}.` });
+     if (!p || !Number.isInteger(qty) || qty < 1) {
+return res.status(400).json({ error: `Invalid quantity for ${p ? p.name : 'an item'}.` });
       }
       total += p.price * qty;
       orderItems.push({ product_id: p.id, name: p.name, quantity: qty, unit_price: p.price });

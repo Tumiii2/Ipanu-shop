@@ -1,19 +1,22 @@
-# The Ìpánu Zone
+# Paws & Co
 
-An online shop for authentic Nigerian snacks and delicacies.
+An online shop for pet supplies — treats, toys, beds, and accessories.
 
 ## Products
 
-- **Ipanu Mix** (local snacks): ₦2,000; minimum order 100
-- **Tapioca** (with fruit topping): ₦2,000; minimum order 100
-- **Garri Platter** (Garri, Eja yoyo & Ede): ₦2,500; minimum order 50
+- **Chicken Dog Treats**: ₦3,500 — crunchy chicken bites that keep tails wagging
+- **Squeaky Rope Toy**: ₦2,500 — durable cotton rope with a squeaker inside
+- **Cozy Pet Bed**: ₦18,000 — soft orthopedic bed for pets of all sizes
+- **Cat Feather Wand**: ₦2,000 — colorful feather toy that brings out the hunt
+- **Adjustable Pet Collar**: ₦4,000 — sturdy adjustable collar with a shiny tag
+- **Stainless Steel Pet Bowl**: ₦3,000 — premium stainless steel bowl, two sizes
 
 ## Features
 
-- Home page and menu for browsing the product catalog. The displayed catalog is defined in `public/js/products.js`.
-- Shopping cart with localStorage persistence, quantity controls, minimum-order enforcement, and a distinct-item count in the header.
+- Home page and menu for browsing the product catalog. Products are loaded from the `products` table in Supabase via `/api/products`.
+- Shopping cart saved in the browser's `localStorage`, with quantity controls and a distinct-item count in the header.
 - Google sign-in through Supabase Auth. Checkout requires an authenticated user.
-- Checkout supports pickup and delivery, collects customer and fulfilment details, and validates required fields and minimum quantities.
+- Checkout supports pickup and delivery, collects customer and fulfilment details, and validates required fields.
 - Express API reads product records from Supabase and stores orders and order items in the `orders` and `order_items` tables.
 - Order confirmation emails are sent through Mailgun in plain-text and HTML formats when Mailgun configuration is available.
 - Responsive static pages for the home page, menu, cart, and checkout.
@@ -27,7 +30,7 @@ There is no admin dashboard or product/order management interface in the current
 - **Database and authentication:** Supabase Postgres and Supabase Auth, using `@supabase/supabase-js`
 - **Email:** Mailgun Messages API
 - **Other runtime dependencies:** `dotenv` for environment loading and `ws` for the Supabase Realtime WebSocket transport
-- **Hosting:** Vercel. No deployment URL or Vercel configuration file is tracked in this repository.
+- **Hosting:** Vercel
 
 ## Quick Start
 
@@ -73,7 +76,7 @@ There is no admin dashboard or product/order management interface in the current
 ## Project Structure
 
 ```text
-ipanu-shop/
+pawsandco-store/
 ├── public/
 │   ├── css/styles.css
 │   ├── images/
@@ -95,13 +98,14 @@ ipanu-shop/
 ## API
 
 - `GET /api/config` returns the Supabase URL and public anonymous key needed by the browser client.
-- `GET /api/products` returns product records from Supabase.
+- `GET /api/products` returns active product records from Supabase.
 - `POST /api/orders` requires a valid Supabase access token, validates the order, stores the order and its items, and sends the confirmation email when Mailgun is configured.
 
 ## Contact
 
-- Instagram: [@theipanuzone](https://instagram.com/theipanuzone)
-- Email: [ipanuzone@gmail.com](mailto:ipanuzone@gmail.com)
+- Phone: 08000000000
+- Instagram: [@pawsandco](https://instagram.com/pawsandco)
+- Email: [hello@pawsandco.test](mailto:hello@pawsandco.test)
 
 ## License
 
