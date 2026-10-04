@@ -3,17 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout - The Ìpánu Zone</title>
+  <title>Checkout - Paws & Co</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="css/theme.css">
 </head>
 <body class="bg-[#FFF7ED] text-[#134E4A]">
   <header class="site-header bg-[#0F766E] text-white">
     <div class="site-header__inner container mx-auto px-4">
       <a href="index.html" class="site-brand">
-        <img src="images/logo.png" alt="The Ìpánu Zone Logo" class="site-brand__logo">
-        <span class="site-brand__name font-fredoka">The Ìpánu Zone</span>
+        <img src="images/logo.png" alt="Paws & Co Logo" class="site-brand__logo">
+        <span class="site-brand__name font-fredoka">Paws & Co</span>
       </a>
       <div class="mobile-actions">
         <a href="cart.html" class="mobile-cart" aria-label="Cart">
@@ -38,11 +40,11 @@
   <main class="max-w-4xl mx-auto px-4 py-10">
     <h1 class="text-4xl font-bold text-center mb-8">Checkout</h1>
 
-    <div id="summary" class="bg-[#2B2118] text-white rounded-2xl p-6 mb-8"></div>
+    <div id="summary" class="bg-[#134E4A] text-white rounded-2xl p-6 mb-8"></div>
 
     <div id="loginBox" class="hidden bg-white rounded-2xl p-8 text-center shadow">
       <p class="mb-4 text-lg">Please sign in to place your order.</p>
-      <button id="googleBtn" class="bg-[#F97316] text-black font-bold px-8 py-3 rounded-full">Sign in with Google</button>
+      <a id="googleBtn" href="login.html?redirect=checkout.html" class="inline-block bg-[#F97316] text-black font-bold px-8 py-3 rounded-full">Sign in</a>
     </div>
 
     <form id="orderForm" class="hidden bg-white rounded-2xl p-8 shadow space-y-4">
@@ -125,7 +127,6 @@
       }
     }
 
-    document.getElementById('googleBtn').addEventListener('click', signInWithGoogle);
     document.getElementById('signOutBtn').addEventListener('click', signOutUser);
 
     document.getElementById('orderForm').addEventListener('submit', async (e) => {

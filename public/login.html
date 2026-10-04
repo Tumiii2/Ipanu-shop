@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in - Paws & Co</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <link rel="stylesheet" href="css/theme.css">
+</head>
+<body class="font-poppins bg-[#FFF7ED] text-[#134E4A]">
+  <header class="site-header bg-[#0F766E] text-white">
+    <div class="site-header__inner container mx-auto px-4">
+      <a href="index.html" class="site-brand">
+        <img src="images/logo.png" alt="Paws & Co Logo" class="site-brand__logo">
+        <span class="site-brand__name font-fredoka">Paws & Co</span>
+      </a>
+      <div class="mobile-actions">
+        <a href="cart.html" class="mobile-cart" aria-label="Cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span id="cart-count" class="mobile-cart-count">0</span>
+        </a>
+        <button id="menu-toggle" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-navigation"><span></span><span></span><span></span></button>
+      </div>
+      <nav id="primary-navigation" class="site-nav" aria-label="Primary navigation">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="menu.html" class="nav-link">Menu</a>
+        <a href="cart.html" class="nav-cart" aria-label="Cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span id="cart-count" class="desktop-cart-count">0</span>
+        </a>
+        <span id="authSlot"></span>
+      </nav>
+    </div>
+  </header>
+  <div id="navigation-overlay" aria-hidden="true"></div>
+
+  <main class="container mx-auto flex min-h-[65vh] items-center justify-center px-4 py-12">
+    <section class="w-full max-w-md rounded-2xl bg-white p-6 text-[#292524] shadow-xl sm:p-8">
+      <h1 class="mb-6 text-center text-3xl font-bold">Welcome to Paws &amp; Co</h1>
+      <form id="authForm" class="space-y-4">
+        <div>
+          <label class="mb-1 block text-sm font-semibold" for="authEmail">Email</label>
+          <input id="authEmail" name="email" type="email" autocomplete="email" required class="w-full rounded-lg border border-stone-300 px-3 py-3 text-[#292524] outline-none focus:border-[#EA580C] focus:ring-2 focus:ring-[#EA580C]/20">
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-semibold" for="authPassword">Password</label>
+          <div class="relative">
+            <input id="authPassword" name="password" type="password" autocomplete="current-password" minlength="6" required class="w-full rounded-lg border border-stone-300 px-3 py-3 pr-12 text-[#292524] outline-none focus:border-[#EA580C] focus:ring-2 focus:ring-[#EA580C]/20">
+            <button type="button" data-password-toggle aria-controls="authPassword" aria-label="Show password" class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-800">
+              <svg data-eye-icon aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg data-eye-off-icon aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden h-5 w-5"><path d="m3 3 18 18"/><path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a15.8 15.8 0 0 1-3.1 3.9"/><path d="M6.2 6.2C3.5 8 2 12 2 12s3.6 7 10 7a10 10 0 0 0 4.1-.9"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="text-right">
+          <a id="forgotPasswordLink" href="#forgot-password" class="text-sm font-semibold text-[#C2410C] hover:underline">Forgot password?</a>
+        </div>
+        <p id="authError" class="hidden text-sm font-medium text-red-700" role="alert"></p>
+        <div class="grid grid-cols-2 gap-3">
+          <button type="button" value="login" data-auth-submit class="rounded-full bg-[#EA580C] px-4 py-3 font-bold text-white hover:bg-[#C2410C] disabled:opacity-60">Log in</button>
+          <button type="button" value="signup" data-auth-submit class="rounded-full bg-[#EA580C] px-4 py-3 font-bold text-white hover:bg-[#C2410C] disabled:opacity-60">Create account</button>
+        </div>
+        <div class="flex items-center gap-3 py-1 text-sm text-stone-500" aria-hidden="true"><span class="h-px flex-1 bg-stone-200"></span><span>or</span><span class="h-px flex-1 bg-stone-200"></span></div>
+        <button id="authGoogleBtn" type="button" class="w-full rounded-full bg-[#EA580C] px-4 py-3 font-bold text-white hover:bg-[#C2410C] disabled:opacity-60">Continue with Google</button>
+      </form>
+      <div id="forgotPasswordPanel" class="hidden mt-4 space-y-3 rounded-xl border border-stone-200 p-4">
+        <div id="resetRequestForm" role="group" aria-label="Request a password reset" class="space-y-3">
+          <div>
+            <label class="mb-1 block text-sm font-semibold" for="resetEmail">Email</label>
+            <input id="resetEmail" name="email" type="email" autocomplete="email" class="w-full rounded-lg border border-stone-300 px-3 py-3 text-[#292524] outline-none focus:border-[#EA580C] focus:ring-2 focus:ring-[#EA580C]/20">
+          </div>
+          <button type="button" class="w-full rounded-full bg-[#EA580C] px-4 py-3 font-bold text-white hover:bg-[#C2410C] disabled:opacity-60">Send reset link</button>
+          <p id="resetRequestStatus" class="text-sm font-medium" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-[#134E4A] py-8 text-white" style="background-color: #134E4A !important;">
+    <div class="container mx-auto px-4 text-center">
+      <div class="mb-4 flex items-center justify-center space-x-3">🐾 <span class="font-fredoka text-xl font-bold text-white">Paws &amp; Co</span></div>
+      <div class="text-sm text-white">
+        <div class="footer-contacts">
+          <a href="tel:08000000000" class="footer-link">08000000000</a>
+          <a href="https://instagram.com/pawsandco" target="_blank" rel="noopener" class="footer-link"><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>@pawsandco</a>
+          <a href="mailto:hello@pawsandco.test" class="footer-link"><svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>hello@pawsandco.test</a>
+        </div>
+        <p class="mt-2">© <span id="copyright-year">2026</span> Paws &amp; Co. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    window.addEventListener('paws:duplicate-email-signup', function () {
+      window.setTimeout(function () {
+        var authError = document.getElementById('authError');
+        if (!authError) return;
+        authError.textContent = 'That email already has an account. Try logging in, or use Forgot password, or continue with Google.';
+        authError.classList.remove('hidden');
+      }, 0);
+    });
+  </script>
+</body>
+</html>

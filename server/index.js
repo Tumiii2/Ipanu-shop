@@ -106,6 +106,127 @@ async function sendConfirmationEmail(to, order, items) {
   }
 }
 
+app.get('/api/cart', async (req, res) => {
+  try {
+    const token = (req.headers.authorization || '').replace('Bearer ', '');
+    const { data: userData, error: userError } = await supabase.auth.getUser(token);
+    if (userError || !userData || !userData.user) {
+      return res.status(401).json({ error: 'Please sign in.' });
+    }
+
+    const { data, error } = await supabase
+      .from('cart_items')
+      .select('product_id, quantity')
+      .eq('user_id', userData.user.id);
+    if (error) return res.status(500).json({ error: error.message });
+
+    res.json(data.map(({ product_id, quantity }) => ({ id: product_id, quantity })));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Something went wrong.' });
+  }
+});
+
+app.post('/api/cart', async (req, res) => {
+  try {
+    const token = (req.headers.authorization || '').replace('Bearer ', '');
+    const { data: userData, error: userError } = await supabase.auth.getUser(token);
+    if (userError || !userData || !userData.user) {
+      return res.status(401).json({ error: 'Please sign in.' });
+    }
+
+    const { productId, quantity } = req.body || {};
+    if (typeof productId !== 'string' || !productId.trim() || !Number.isInteger(quantity) || quantity < 1) {
+      return res.status(400).json({ error: 'A product and positive integer quantity are required.' });
+    }
+
+    const { data: existingItem, error: existingError } = await supabase
+      .from('cart_items')
+      .select('quantity')
+      .eq('user_id', userData.user.id)
+      .eq('product_id', productId)
+      .maybeSingle();
+    if (existingError) return res.status(500).json({ error: existingError.message });
+
+    const newQuantity = (existingItem ? existingItem.quantity : 0) + quantity;
+    const { data, error } = await supabase
+      .from('cart_items')
+      .upsert({ user_id: userData.user.id, product_id: productId, quantity: newQuantity }, {
+        onConflict: 'user_id,product_id',
+      })
+      .select('product_id, quantity')
+      .single();
+    if (error) return res.status(500).json({ error: error.message });
+
+    res.json({ id: data.product_id, quantity: data.quantity });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Something went wrong.' });
+  }
+});
+
+app.patch('/api/cart/:productId', async (req, res) => {
+  try {
+    const token = (req.headers.authorization || '').replace('Bearer ', '');
+    const { data: userData, error: userError } = await supabase.auth.getUser(token);
+    if (userError || !userData || !userData.user) {
+      return res.status(401).json({ error: 'Please sign in.' });
+    }
+
+    const { quantity } = req.body || {};
+    if (!Number.isInteger(quantity)) {
+      return res.status(400).json({ error: 'Quantity must be an integer.' });
+    }
+
+    if (quantity < 1) {
+      const { error } = await supabase
+        .from('cart_items')
+        .delete()
+        .eq('user_id', userData.user.id)
+        .eq('product_id', req.params.productId);
+      if (error) return res.status(500).json({ error: error.message });
+      return res.json({ id: req.params.productId, quantity: 0 });
+    }
+
+    const { data, error } = await supabase
+      .from('cart_items')
+      .update({ quantity })
+      .eq('user_id', userData.user.id)
+      .eq('product_id', req.params.productId)
+      .select('product_id, quantity')
+      .maybeSingle();
+    if (error) return res.status(500).json({ error: error.message });
+    if (!data) return res.status(404).json({ error: 'Cart item not found.' });
+
+    res.json({ id: data.product_id, quantity: data.quantity });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Something went wrong.' });
+  }
+});
+
+app.delete('/api/cart/:productId', async (req, res) => {
+  try {
+    const token = (req.headers.authorization || '').replace('Bearer ', '');
+    const { data: userData, error: userError } = await supabase.auth.getUser(token);
+    if (userError || !userData || !userData.user) {
+      return res.status(401).json({ error: 'Please sign in.' });
+    }
+
+    const { error } = await supabase
+      .from('cart_items')
+      .delete()
+      .eq('user_id', userData.user.id)
+      .eq('product_id', req.params.productId);
+    if (error) return res.status(500).json({ error: error.message });
+
+    res.json({ id: req.params.productId });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Something went wrong.' });
+  }
+});
+
 app.post('/api/orders', async (req, res) => {
   try {
     const token = (req.headers.authorization || '').replace('Bearer ', '');

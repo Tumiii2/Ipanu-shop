@@ -1,4 +1,102 @@
 // Cart functionality for Paws & Co
+function sendCartChange(method, productId, quantity) {
+  (async function() {
+    try {
+      if (typeof getSession !== 'function') return;
+      var session = await getSession();
+      if (!session || !session.access_token) return;
+
+      var options = {
+        method: method,
+        headers: {
+          Authorization: 'Bearer ' + session.access_token,
+          'Content-Type': 'application/json'
+        }
+      };
+      if (method !== 'DELETE') {
+        options.body = JSON.stringify(method === 'POST'
+          ? { productId: String(productId), quantity: quantity }
+          : { quantity: quantity });
+      }
+
+      var path = method === 'POST' ? '/api/cart' : '/api/cart/' + encodeURIComponent(productId);
+      await fetch(path, options);
+    } catch (e) {
+      // Cart changes remain local if the server is unavailable.
+    }
+  })();
+}
+
+function refreshCartFeedback(message) {
+  updateCartCount();
+  showToast(message);
+}
+
+var cartSyncStarted = false;
+
+async function syncCartFromServer() {
+  if (cartSyncStarted) return;
+  cartSyncStarted = true;
+
+  try {
+    if (typeof getSession !== 'function') return;
+    var session = await getSession();
+    if (!session || !session.access_token) return;
+
+    var headers = { Authorization: 'Bearer ' + session.access_token };
+    var response = await fetch('/api/cart', { headers: headers });
+    if (!response.ok) return;
+    var serverItems = await response.json();
+    if (!Array.isArray(serverItems)) return;
+
+    var serverById = Object.create(null);
+    var mergedById = Object.create(null);
+    serverItems.forEach(function(item) {
+      if (!item || item.id == null) return;
+      var id = String(item.id);
+      var quantity = Number(item.quantity) || 0;
+      serverById[id] = { id: item.id, quantity: quantity };
+      mergedById[id] = { id: item.id, quantity: quantity };
+    });
+
+    cart.getAll().forEach(function(item) {
+      if (!item || item.id == null) return;
+      var id = String(item.id);
+      var quantity = Number(item.quantity) || 0;
+      var existing = mergedById[id];
+      if (!existing) {
+        mergedById[id] = { id: item.id, quantity: quantity };
+      } else {
+        existing.quantity = Math.max(existing.quantity, quantity);
+      }
+    });
+
+    cart.items = Object.keys(mergedById).map(function(id) {
+      return { id: mergedById[id].id, quantity: mergedById[id].quantity };
+    });
+
+    await Promise.all(cart.items.map(async function(item) {
+      var serverItem = serverById[String(item.id)];
+      if (serverItem && serverItem.quantity === item.quantity) return;
+      try {
+        await fetch('/api/cart/' + encodeURIComponent(item.id), {
+          method: 'PATCH',
+          headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
+          body: JSON.stringify({ quantity: item.quantity })
+        });
+      } catch (e) {
+        // Keep the merged cart locally if an individual update fails.
+      }
+    }));
+
+    cart.save();
+    updateCartCount();
+    if (typeof renderCart === 'function') renderCart();
+  } catch (e) {
+    // Keep the local cart available if authentication or the server fails.
+  }
+}
+
 class Cart {
   constructor() {
     this.items = JSON.parse(localStorage.getItem('cart')) || [];
@@ -19,6 +117,8 @@ class Cart {
     }
     
     this.save();
+    refreshCartFeedback('Added to cart');
+    sendCartChange('POST', productId, validQuantity);
   }
 
   // Remove item from cart
@@ -27,6 +127,8 @@ class Cart {
       return String(item.id) !== String(productId);
     });
     this.save();
+    refreshCartFeedback('Removed from cart');
+    sendCartChange('DELETE', productId);
   }
 
   // Update quantity for an item
@@ -41,6 +143,8 @@ class Cart {
       }
       item.quantity = quantity;
       this.save();
+      refreshCartFeedback('Cart updated');
+      sendCartChange('PATCH', productId, quantity);
       return { updated: true };
     }
     return { updated: false };
@@ -72,6 +176,9 @@ class Cart {
 
   // Clear cart
   clear() {
+    this.items.forEach(function(item) {
+      sendCartChange('DELETE', item.id);
+    });
     this.items = [];
     this.save();
   }
@@ -107,7 +214,7 @@ function showToast(message) {
   t.textContent = message;
   t.style.cssText = 'position:fixed;bottom:24px;right:24px;max-width:320px;background:#2B2118;color:#F97316;padding:12px 20px;border-radius:12px;font-weight:600;font-family:Poppins,sans-serif;z-index:99999;box-shadow:0 4px 12px rgba(0,0,0,.3)';
   document.body.appendChild(t);
-  setTimeout(function () { t.remove(); }, 2500);
+  setTimeout(function () { t.remove(); }, 1500);
 }
 
 // Confirm modal function
