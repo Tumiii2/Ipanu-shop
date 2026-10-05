@@ -26,7 +26,7 @@ app.get('/api/config', (req, res) => {
 });
 
 app.get('/api/products', async (req, res) => {
-  const { data, error } = await supabase.from('products').select('*');
+  const { data, error } = await supabase.from('products').select('*').eq('active', true);
   if (error) return res.status(500).json({ error: error.message });
   res.json(data);
 });
@@ -244,7 +244,7 @@ app.post('/api/orders', async (req, res) => {
     if (!Array.isArray(items) || items.length === 0) return res.status(400).json({ error: 'Your cart is empty.' });
 
     const { data: products, error: pErr } = await supabase
-      .from('products').select('*').in('id', items.map((i) => i.id));
+      .from('products').select('*').in('id', items.map((i) => i.id)).eq('active', true);
     if (pErr) return res.status(500).json({ error: 'Could not load products.' });
 
     let total = 0;
